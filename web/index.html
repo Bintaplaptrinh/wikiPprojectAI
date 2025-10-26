@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo cáo Dân số Thế giới</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Báo cáo Dân số Thế giới</h1>
+    <p>Dữ liệu thu thập từ Wikipedia, lưu trữ trong MongoDB và xử lý bằng Hadoop cùng Spark.</p>
+  </header>
+
+  <main>
+    <section class="controls">
+      <button id="generate-report-btn" class="primary-btn">Tạo Báo Cáo Tổng Hợp</button>
+      <p id="status" role="status" aria-live="polite">Sẵn sàng tạo báo cáo.</p>
+    </section>
+
+    <section class="report-section" aria-live="polite">
+      <div id="report-output"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Nhấn nút để tải dữ liệu mẫu, kết quả Hadoop (Q1-Q4) và tóm tắt mô hình Spark.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
