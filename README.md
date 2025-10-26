@@ -88,6 +88,8 @@ hdfs dfs -mkdir -p /data/wiki/bronze
 hdfs dfs -put -f data/population_raw.jsonl /data/wiki/bronze/
 hdfs dfs -put -f data/graph_edges.jsonl /data/wiki/bronze/
 ```
+hdfs dfs -put -f /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/population_raw.jsonl /data/wiki/bronze
+hdfs dfs -put -f /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/graph_edges.jsonl /data/wiki/bronze
 
 ## 3. ETL với Hadoop Streaming
 
@@ -110,8 +112,21 @@ hadoop jar /opt/hadoop/share/hadoop/tools/lib/hadoop-streaming-*.jar \
     -file /hadoop/etl/mapper.py \
     -file /hadoop/etl/reducer.py
 
+final
+export HADOOP_STREAMING_JAR=/home/hadoop/hadoop/share/hadoop/tools/lib/hadoop-streaming-3.4.0.jar
+hadoop jar "$HADOOP_STREAMING_JAR" \
+  -files /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/etl/mapper.py,/home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/etl/reducer.py \
+  -input /data/wiki/bronze/population_raw.jsonl \
+  -output /data/wiki/silver/pop_clean_temp \
+  -mapper /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/etl/mapper.py \
+  -reducer /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/etl/reducer.py
+
 hdfs dfs -getmerge /data/wiki/silver/pop_clean_temp/part-* data/pop_clean.jsonl
 hdfs dfs -put -f data/pop_clean.jsonl /data/wiki/silver/pop_clean.jsonl
+
+
+hdfs dfs -getmerge /data/wiki/silver/pop_clean_temp/part-* /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/pop_clean.jsonl
+hdfs dfs -put -f /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/pop_clean.jsonl /data/wiki/silver/pop_clean.jsonl
 ```
 
 ## 4. Chạy các câu hỏi Hadoop Q1–Q4
@@ -129,6 +144,18 @@ hadoop jar $HADOOP_STREAMING_JAR \
 hdfs dfs -getmerge /data/wiki/results/q1/part-* data/hadoop/q1.tsv
 ```
 
+final
+hadoop jar "$HADOOP_STREAMING_JAR" \
+  -files /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q1/mapper.py,/home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q1/reducer.py \
+  -input /data/wiki/silver/pop_clean.jsonl \
+  -output /data/wiki/results/q1 \
+  -mapper /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q1/mapper.py \
+  -reducer /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q1/reducer.py
+
+hdfs dfs -getmerge /data/wiki/results/q1/part-* /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/q1.tsv
+
+
+
 ### Q2 – Top 10 mật độ dân số cao nhất
 ```bash
 hadoop jar $HADOOP_STREAMING_JAR \
@@ -142,6 +169,16 @@ hadoop jar $HADOOP_STREAMING_JAR \
 hdfs dfs -getmerge /data/wiki/results/q2/part-* data/hadoop/q2.jsonl
 ```
 
+final
+hadoop jar "$HADOOP_STREAMING_JAR" \
+  -files /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q2/mapper.py,/home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q2/reducer.py \
+  -input /data/wiki/silver/pop_clean.jsonl \
+  -output /data/wiki/results/q2 \
+  -mapper /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q2/mapper.py \
+  -reducer /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q2/reducer.py
+
+hdfs dfs -getmerge /data/wiki/results/q2/part-* /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/q2.jsonl
+
 ### Q3 – Phân phối theo bucket dân số
 ```bash
 hadoop jar $HADOOP_STREAMING_JAR \
@@ -154,6 +191,17 @@ hadoop jar $HADOOP_STREAMING_JAR \
 
 hdfs dfs -getmerge /data/wiki/results/q3/part-* data/hadoop/q3.tsv
 ```
+hadoop jar "$HADOOP_STREAMING_JAR" \
+  -files /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q3/mapper.py,/home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q3/reducer.py \
+  -input /data/wiki/silver/pop_clean.jsonl \
+  -output /data/wiki/results/q3 \
+  -mapper /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q3/mapper.py \
+  -reducer /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q3/reducer.py
+
+
+
+hdfs dfs -getmerge /data/wiki/results/q3/part-* /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/q3.tsv
+
 
 ### Q4 – Bậc vào/ra từ đồ thị ảnh hưởng Wikipedia
 ```bash
@@ -169,7 +217,18 @@ hadoop jar $HADOOP_STREAMING_JAR \
 hdfs dfs -getmerge /data/wiki/results/q4/part-* data/hadoop/q4.jsonl
 ```
 
-> Các file trong `data/hadoop/` là nguồn dữ liệu mà API Express sử dụng.
+final
+hadoop jar "$HADOOP_STREAMING_JAR" \
+  -files /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q4/mapper.py,/home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q4/reducer.py \
+  -D mapreduce.job.reduces=1 \
+  -input /data/wiki/bronze/graph_edges.jsonl \
+  -output /data/wiki/results/q4 \
+  -mapper /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q4/mapper.py \
+  -reducer /home/tuan-phat/Documents/wikiP/wikiPprojectAI/hadoop/q4/reducer.py
+
+hdfs dfs -getmerge /data/wiki/results/q4/part-* /home/tuan-phat/Documents/wikiP/wikiPprojectAI/data/q4.jsonl
+
+> Các file trong `data/` là nguồn dữ liệu mà API Express sử dụng.
 
 ## 5. Huấn luyện cụm với Spark MLlib
 
