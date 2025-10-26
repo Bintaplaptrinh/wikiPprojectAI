@@ -1,0 +1,10 @@
+{"Country": "China, Macao Special Administrative Region", "Region": "Asia", "Subregion": "Eastern Asia", "population": 720262, "area_km2": 33.0, "density": 22000.0, "pop_bucket": "<1M"}	
+{"Country": "Singapore", "Region": "Asia", "Subregion": "South-Eastern Asia", "population": 6110200, "area_km2": 737.0, "density": 8290.0, "pop_bucket": "1M-10M"}	
+{"Country": "China, Hong Kong Special Administrative Region", "Region": "Asia", "Subregion": "Eastern Asia", "population": 7414910, "area_km2": 1050.0, "density": 7062.0, "pop_bucket": "1M-10M"}	
+{"Country": "Gibraltar", "Region": "Europe", "Subregion": "Southern Europe", "population": 39329, "area_km2": 6.8, "density": 5800.0, "pop_bucket": "<1M"}	
+{"Country": "Bahrain", "Region": "Asia", "Subregion": "Western Asia", "population": 1607049, "area_km2": 790.0, "density": 2034.0, "pop_bucket": "1M-10M"}	
+{"Country": "Holy See", "Region": "Europe", "Subregion": "Southern Europe", "population": 882, "area_km2": 0.5, "density": 1800.0, "pop_bucket": "<1M"}	
+{"Country": "Maldives", "Region": "Asia", "Subregion": "Southern Asia", "population": 527799, "area_km2": 300.0, "density": 1759.0, "pop_bucket": "<1M"}	
+{"Country": "Sint Maarten", "Region": "Americas", "Subregion": "Latin America And The Caribbean", "population": 43351, "area_km2": 34.0, "density": 1275.0, "pop_bucket": "<1M"}	
+{"Country": "Jordan", "Region": "Asia", "Subregion": "Western Asia", "population": 11552876, "area_km2": 88794.0, "density": 130.0, "pop_bucket": "10M-50M"}	
+{"Country": "Cabo Verde", "Region": "Africa", "Subregion": "Sub-Saharan Africa", "population": 524877, "area_km2": 4030.0, "density": 130.0, "pop_bucket": "<1M"}	
